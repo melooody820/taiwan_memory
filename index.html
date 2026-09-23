@@ -1960,7 +1960,7 @@
         document.execCommand(command, false, value);
       }
 
-      function renderPosts(posts, emptyText, allowDelete = true) {
+      function renderPosts(posts, emptyText) {
         if (!posts.length) return `<div class="empty">${emptyText}</div>`;
         return posts.map((post) => {
           const images = Array.isArray(post.images) ? post.images.slice(0, 9) : [];
@@ -1994,7 +1994,6 @@
                 <button type="submit">留言</button>
               </form>
             </section>
-            ${allowDelete ? `<div class="actions"><button class="delete" type="button" data-delete-post="${escapeHtml(post.id)}">删除</button></div>` : ""}
           </article>
         `;
         }).join("");
@@ -2235,10 +2234,6 @@
           return;
         }
 
-        const deleteButton = event.target.closest("[data-delete-post]");
-        if (!deleteButton) return;
-        await db.collection("posts").doc(deleteButton.dataset.deletePost).delete();
-        await loadData();
       }
 
       async function savePostComment(event) {
